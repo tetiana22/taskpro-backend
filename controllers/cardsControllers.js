@@ -1,5 +1,5 @@
-const { errorCatcher, HttpError } = require('../helpers');
-const cardsServices = require('../services/cardsServices.js');
+import { errorCatcher, HttpError } from "../helpers/index.js";
+import cardsServices from "../services/cardsServices.js";
 
 const getAllCards = async (req, res) => {
   const { _id: owner } = req.user;
@@ -25,7 +25,7 @@ const updateCard = async (req, res) => {
   const { _id: owner } = req.user;
 
   if (!body || Object.keys(body).length === 0) {
-    throw HttpError(400, 'missing field');
+    throw HttpError(400, "missing field");
   }
 
   const updatedCard = await cardsServices.updateCard(cardId, owner, body);
@@ -63,10 +63,10 @@ const deleteCard = async (req, res) => {
     throw HttpError(404, `Card with id ${cardId} not found`);
   }
 
-  res.json({ message: 'Card deleted successfully' });
+  res.json({ message: "Card deleted successfully" });
 };
 
-module.exports = {
+export default {
   getAllCards: errorCatcher(getAllCards),
   addCard: errorCatcher(addCard),
   updateCard: errorCatcher(updateCard),

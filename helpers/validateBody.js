@@ -1,5 +1,5 @@
-const HttpError = require("./HttpError.js");
-const Joi = require("joi");
+import HttpError from "./HttpError.js";
+import Joi from "joi";
 
 const validateBody = (schema) => {
   const func = (req, _, next) => {
@@ -18,4 +18,4 @@ const validateBody = (schema) => {
   return func;
 };
 
-module.exports = validateBody;
+export default validateBody;

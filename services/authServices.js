@@ -1,10 +1,13 @@
-const dotenv = require('dotenv');
-const { User } = require('../models/User');
-const cloudinary = require('cloudinary').v2;
+import dotenv from "dotenv";
+import { userSchema } from "../models/User.js";
+import cloudinary from "cloudinary";
 dotenv.config();
 
-const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
-  process.env;
+const {
+  CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
+} = process.env;
 
 const saveAvatar = async (tmpUpload, _id) => {
   cloudinary.config({
@@ -16,7 +19,7 @@ const saveAvatar = async (tmpUpload, _id) => {
   const url = cloudinary.url(result.public_id, {
     width: 100,
     height: 150,
-    crop: 'fill',
+    crop: "fill",
   });
   return url;
 };
@@ -26,7 +29,7 @@ const updateUserData = async (userId, updatedData) => {
     updatedData.password = await bcryptjs.hash(updatedData.password, 10);
   }
 
-  const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
+  const updatedUser = await userSchema.findByIdAndUpdate(userId, updatedData, {
     new: true,
   });
 
@@ -35,15 +38,14 @@ const updateUserData = async (userId, updatedData) => {
 };
 
 const updateThemeDB = async (idOwner, theme) => {
-  const updateTheme = await User.findOneAndUpdate(
+  const updateTheme = await userSchema.findOneAndUpdate(
     idOwner,
     { theme },
     { new: true }
   );
   return updateTheme;
 };
-
-module.exports = {
+export default {
   saveAvatar,
   updateUserData,
   updateThemeDB,

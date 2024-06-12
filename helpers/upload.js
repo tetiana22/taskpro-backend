@@ -1,5 +1,9 @@
-const multer = require("multer");
-const path = require("path");
+import multer from "multer";
+import { fileURLToPath } from "url";
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const tmpDir = path.join(__dirname, "../", "tmp");
 
@@ -14,4 +18,4 @@ const upload = multer({
   storage: multerConfig,
 });
 
-module.exports = upload;
+export default upload;

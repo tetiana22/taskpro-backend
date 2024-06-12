@@ -1,15 +1,15 @@
-const { Schema, model } = require('mongoose');
-const handleMongooseError = require('../helpers/handleMongooseError.js');
+import { Schema, model } from "mongoose";
+import handleMongooseError from "../helpers/handleMongooseError.js";
 
 const options = [
-  '#icon-Project',
-  '#icon-star',
-  '#icon-loading',
-  '#icon-puzzle-piece',
-  '#icon-container',
-  '#icon-lightning',
-  '#icon-colors',
-  '#icon-hexagon',
+  "#icon-Project",
+  "#icon-star",
+  "#icon-loading",
+  "#icon-puzzle-piece",
+  "#icon-container",
+  "#icon-lightning",
+  "#icon-colors",
+  "#icon-hexagon",
 ];
 
 const boardSchema = new Schema(
@@ -17,30 +17,26 @@ const boardSchema = new Schema(
     title: {
       type: String,
       unique: true,
-      required: [true, 'Set title for board'],
+      required: [true, "Set title for board"],
     },
     icon: {
       type: String,
-      default: '#icon-hexagon',
+      default: "#icon-hexagon",
       enum: options,
     },
     background: {
       type: String,
-      default: '1',
+      default: "1",
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
   },
   { versionKey: false, timestamps: true }
 );
 
-boardSchema.post('save', handleMongooseError);
+boardSchema.post("save", handleMongooseError);
 
-const Board = model('board', boardSchema);
-
-module.exports = {
-  Board,
-};
+export const Board = model("board", boardSchema);

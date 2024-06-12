@@ -1,11 +1,11 @@
-const validateBody = require('./validateBody');
-const HttpError = require('./HttpError');
-const errorCatcher = require('./errorCatcher');
-const upload = require('./upload');
-const authenticate = require('./authenticate');
-const isIdValid = require('./isIdValid');
+import validateBody from "./validateBody.js";
+import HttpError from "./HttpError.js";
+import errorCatcher from "./errorCatcher.js";
+import upload from "./upload.js";
+import authenticate from "./authenticate.js";
+import isIdValid from "./isIdValid.js";
 
-module.exports = {
+export {
   validateBody,
   HttpError,
   errorCatcher,

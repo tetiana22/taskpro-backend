@@ -9,4 +9,4 @@ const errorCatcher = (ctrl) => {
   return func;
 };
 
-module.exports = errorCatcher;
+export default errorCatcher;

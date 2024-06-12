@@ -1,23 +1,23 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from "mongoose";
 
-const handleMongooseError = require('../helpers/handleMongooseError');
+import handleMongooseError from "../helpers/handleMongooseError.js";
 
-const priorityList = ['Without priority', 'Low', 'Medium', 'High'];
+const priorityList = ["Without priority", "Low", "Medium", "High"];
 
-const cardSchema = new Schema(
+export const cardSchema = new Schema(
   {
     title: {
       type: String,
-      required: [true, 'Set title for card'],
+      required: [true, "Set title for card"],
     },
     description: {
       type: String,
-      required: [true, 'Set description for card'],
+      required: [true, "Set description for card"],
     },
     priority: {
       type: String,
       enum: priorityList,
-      default: 'Low',
+      default: "Low",
     },
     color: {
       type: String,
@@ -25,22 +25,22 @@ const cardSchema = new Schema(
     },
     deadline: {
       type: Date,
-      required: [true, 'Set deadline for card'],
+      required: [true, "Set deadline for card"],
     },
     columnId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'Column',
+      ref: "Column",
     },
     boardId: {
       type: Schema.Types.ObjectId,
       reqiured: true,
-      ref: 'Board',
+      ref: "Board",
     },
     owner: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'User',
+      ref: "User",
     },
     index: {
       type: Number,
@@ -50,10 +50,4 @@ const cardSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-cardSchema.post('save', handleMongooseError);
-
-const Card = model('card', cardSchema);
-
-module.exports = {
-  Card,
-};
+cardSchema.post("save", handleMongooseError);

@@ -1,49 +1,43 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from "mongoose";
 
-const handleMongooseError = require('../helpers/handleMongooseError');
+import handleMongooseError from "../helpers/handleMongooseError.js";
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const themeList = ['light', 'violet', 'dark'];
+const themeList = ["light", "violet", "dark"];
 
-const userSchema = new Schema(
+export const userSchema = new Schema(
   {
     name: {
       type: String,
     },
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: [true, "Email is required"],
       unique: true,
       match: emailRegexp,
     },
     password: {
       type: String,
       validate: {
-        validator: function (value) {
+        validator: function(value) {
           return value.length >= 6;
         },
-        message: 'Password must be at least 6 characters long',
+        message: "Password must be at least 6 characters long",
       },
-      required: [true, 'Password is required'],
+      required: [true, "Password is required"],
     },
     token: {
       type: String,
       default: null,
     },
-    avatarURL: { type: String, default: '' },
+    avatarURL: { type: String, default: "" },
     theme: {
       type: String,
       enum: themeList,
-      default: 'dark',
+      default: "dark",
     },
   },
   { versionKey: false, timestamps: true }
 );
 
-userSchema.post('save', handleMongooseError);
-
-const User = model('user', userSchema);
-
-module.exports = {
-  User,
-};
+userSchema.post("save", handleMongooseError);

@@ -1,26 +1,26 @@
-const express = require('express');
-const { authenticate, validateBody } = require('../helpers');
-const cardsControllers = require('../controllers/cardsControllers.js');
-const {
+import express from "express";
+import { authenticate, validateBody } from "../helpers/index.js";
+import cardsControllers from "../controllers/cardsControllers.js";
+import {
   createCardSchema,
   updateCardSchema,
   updateColumnIdInCardSchema,
-} = require('../schemas/cardSchema.js');
-const { isIdValid } = require('../helpers');
+} from "../schemas/cardSchema.js";
+import { isIdValid } from "../helpers/index.js";
 
 const cardsRouter = express.Router();
 
-cardsRouter.get('/:boardId', authenticate, cardsControllers.getAllCards);
+cardsRouter.get("/:boardId", authenticate, cardsControllers.getAllCards);
 
 cardsRouter.post(
-  '/',
+  "/",
   authenticate,
   validateBody(createCardSchema),
   cardsControllers.addCard
 );
 
 cardsRouter.put(
-  '/:cardId',
+  "/:cardId",
   authenticate,
   isIdValid,
   validateBody(updateCardSchema),
@@ -28,7 +28,7 @@ cardsRouter.put(
 );
 
 cardsRouter.patch(
-  '/:cardId',
+  "/:cardId",
   authenticate,
   isIdValid,
   validateBody(updateColumnIdInCardSchema),
@@ -36,10 +36,10 @@ cardsRouter.patch(
 );
 
 cardsRouter.delete(
-  '/:cardId',
+  "/:cardId",
   authenticate,
   isIdValid,
   cardsControllers.deleteCard
 );
 
-module.exports = cardsRouter;
+export default cardsRouter;

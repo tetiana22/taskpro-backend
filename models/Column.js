@@ -1,28 +1,23 @@
-const { Schema, model } = require('mongoose');
-const handleMongooseError = require('../helpers/handleMongooseError');
+import { Schema, model } from "mongoose";
+import handleMongooseError from "../helpers/handleMongooseError.js";
 
-const columnSchema = new Schema(
+export const columnSchema = new Schema(
   {
     title: {
       type: String,
-      required: [true, 'Set title for column'],
+      required: [true, "Set title for column"],
     },
     boardId: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'Board',
+      ref: "Board",
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
   },
   { versionKey: false, timestamps: true }
 );
-columnSchema.post('save', handleMongooseError);
-const Column = model('column', columnSchema);
-
-module.exports = {
-  Column,
-};
+columnSchema.post("save", handleMongooseError);

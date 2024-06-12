@@ -1,6 +1,6 @@
-const { errorCatcher, HttpError } = require('../helpers');
-const boardsServices = require('../services/boardsServices.js');
-const { mongoose } = require('mongoose');
+import { errorCatcher, HttpError } from "../helpers/index.js";
+import  boardsServices  from "../services/boardsServices.js";
+import { mongoose } from "mongoose";
 
 const getAllBoards = async (req, res) => {
   const { _id: owner } = req.user;
@@ -28,7 +28,7 @@ const updateBoard = async (req, res) => {
   const { body } = req;
 
   if (!body || Object.keys(body).length === 0) {
-    throw HttpError(400, 'missing field');
+    throw HttpError(400, "missing field");
   }
 
   try {
@@ -40,7 +40,7 @@ const updateBoard = async (req, res) => {
 
     res.json(updatedBoard);
   } catch (error) {
-    if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    if (error.name === "CastError" && error.kind === "ObjectId") {
       throw HttpError(400, `Invalid board ID: ${boardId}`);
     } else {
       throw error;
@@ -54,10 +54,10 @@ const deleteBoard = async (req, res) => {
 
   const board = await boardsServices.removeBoard(owner, boardId);
   if (!board) throw HttpError(404, `Board with id ${boardId} not found`);
-  res.json({ message: 'Board deleted successfully' });
+  res.json({ message: "Board deleted successfully" });
 };
 
-module.exports = {
+export default {
   getAllBoards: errorCatcher(getAllBoards),
   addBoard: errorCatcher(addBoard),
   updateBoard: errorCatcher(updateBoard),

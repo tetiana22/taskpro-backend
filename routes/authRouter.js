@@ -1,36 +1,41 @@
-const express = require('express');
+import express from "express";
 
-const { authenticate, validateBody, upload } = require('../helpers');
-const schemas = require('../schemas/userSchema');
-const ctrl = require('../controllers/authControllers');
+import { authenticate, validateBody, upload } from "../helpers/index.js";
+import {
+  registerSchema,
+  loginSchema,
+  updateUserSchema,
+  updateThemeSchema,
+} from "../schemas/userSchema.js";
+import authControllers from "../controllers/authControllers.js";
 
 const authRouter = express.Router();
 
 authRouter.post(
-  '/register',
-  validateBody(schemas.registerSchema),
-  ctrl.register
+  "/register",
+  validateBody(registerSchema),
+  authControllers.register
 );
 
-authRouter.post('/login', validateBody(schemas.loginSchema), ctrl.login);
+authRouter.post("/login", validateBody(loginSchema), authControllers.login);
 
-authRouter.get('/current', authenticate, ctrl.getCurrent);
+authRouter.get("/current", authenticate, authControllers.getCurrent);
 
-authRouter.post('/logout', authenticate, ctrl.logout);
+authRouter.post("/logout", authenticate, authControllers.logout);
 
 authRouter.put(
-  '/update',
+  "/update",
   authenticate,
-  upload.single('avatarURL'),
-  validateBody(schemas.updateUserSchema),
-  ctrl.updateUser
+  upload.single("avatarURL"),
+  validateBody(updateUserSchema),
+  authControllers.updateUser
 );
 
 authRouter.patch(
-  '/theme',
+  "/theme",
   authenticate,
-  validateBody(schemas.updateThemeSchema),
-  ctrl.updateUserTheme
+  validateBody(updateThemeSchema),
+  authControllers.updateUserTheme
 );
 
-module.exports = authRouter;
+export default authRouter;

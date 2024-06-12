@@ -1,25 +1,25 @@
-const express = require('express');
-const boardsControllers = require('../controllers/boardsControllers.js');
-const { authenticate, validateBody } = require('../helpers');
-const {
+import express from "express";
+import boardsControllers from "../controllers/boardsControllers.js";
+import { authenticate, validateBody } from "../helpers/index.js";
+import {
   createBoardSchema,
   updateBoardSchema,
-} = require('../schemas/boardSchema.js');
-const { isIdValid } = require('../helpers');
+} from "../schemas/boardSchema.js";
+import  isIdValid  from "../helpers/isIdValid.js";
 
 const boardsRouter = express.Router();
 
-boardsRouter.get('/', authenticate, boardsControllers.getAllBoards);
+boardsRouter.get("/", authenticate, boardsControllers.getAllBoards);
 
 boardsRouter.post(
-  '/',
+  "/",
   authenticate,
   validateBody(createBoardSchema),
   boardsControllers.addBoard
 );
 
 boardsRouter.put(
-  '/:boardId',
+  "/:boardId",
   authenticate,
   isIdValid,
   validateBody(updateBoardSchema),
@@ -27,10 +27,10 @@ boardsRouter.put(
 );
 
 boardsRouter.delete(
-  '/:boardId',
+  "/:boardId",
   authenticate,
   isIdValid,
   boardsControllers.deleteBoard
 );
 
-module.exports = boardsRouter;
+export default boardsRouter;

@@ -1,7 +1,8 @@
-const app = require("./app");
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import app from "./app.js";
 import dotenv from "dotenv";
 dotenv.config();
+
 const { DB_HOST, PORT } = process.env;
 
 mongoose
@@ -16,5 +17,3 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
-
-//password for database AxZBjCYVDxtK0UBv

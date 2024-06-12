@@ -1,5 +1,5 @@
-const { errorCatcher, HttpError } = require('../helpers');
-const columnsServices = require('../services/columnsServices.js');
+import { errorCatcher, HttpError } from "../helpers/index.js";
+import columnsServices from "../services/columnsServices.js";
 
 const getAllColumns = async (req, res) => {
   const { boardId } = req.params;
@@ -14,7 +14,7 @@ const addColumn = async (req, res) => {
   const { boardId, title } = req.body;
 
   if (!boardId) {
-    throw HttpError(400, 'Board ID is required');
+    throw HttpError(400, "Board ID is required");
   }
 
   const newColumn = await columnsServices.addColumn(owner, { boardId, title });
@@ -32,7 +32,7 @@ const updateColumn = async (req, res) => {
   const { _id: owner } = req.user;
 
   if (!body || Object.keys(body).length === 0) {
-    throw HttpError(400, 'missing field');
+    throw HttpError(400, "missing field");
   }
 
   const updatedColumn = await columnsServices.updateColumn(
@@ -58,10 +58,10 @@ const deleteColumn = async (req, res) => {
     throw HttpError(404, `Column with id ${columnId} not found`);
   }
 
-  res.json({ message: 'Column deleted successfully' });
+  res.json({ message: "Column deleted successfully" });
 };
 
-module.exports = {
+export default {
   getAllColumns: errorCatcher(getAllColumns),
   addColumn: errorCatcher(addColumn),
   updateColumn: errorCatcher(updateColumn),

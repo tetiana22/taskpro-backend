@@ -1,25 +1,25 @@
-const express = require('express');
-const { authenticate, validateBody } = require('../helpers');
-const columnsControllers = require('../controllers/columnsControllers.js');
-const {
+import express from "express";
+import { authenticate, validateBody, isIdValid } from "../helpers/index.js";
+
+import columnsControllers from "../controllers/columnsControllers.js";
+import {
   createColumnSchema,
   updateColumnSchema,
-} = require('../schemas/columnSchema.js');
-const { isIdValid } = require('../helpers');
+} from "../schemas/columnSchema.js";
 
 const columnsRouter = express.Router();
 
-columnsRouter.get('/:boardId', authenticate, columnsControllers.getAllColumns);
+columnsRouter.get("/:boardId", authenticate, columnsControllers.getAllColumns);
 
 columnsRouter.post(
-  '/',
+  "/",
   authenticate,
   validateBody(createColumnSchema),
   columnsControllers.addColumn
 );
 
 columnsRouter.put(
-  '/:columnId',
+  "/:columnId",
   authenticate,
   isIdValid,
   validateBody(updateColumnSchema),
@@ -27,10 +27,10 @@ columnsRouter.put(
 );
 
 columnsRouter.delete(
-  '/:columnId',
+  "/:columnId",
   authenticate,
   isIdValid,
   columnsControllers.deleteColumn
 );
 
-module.exports = columnsRouter;
+export default columnsRouter;

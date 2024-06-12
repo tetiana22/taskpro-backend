@@ -2,7 +2,8 @@
   "name": "taskpro-backend",
   "version": "1.0.0",
   "description": "goit group 8 final backend project",
-  "main": "server.js",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node ./server.js",
     "dev": "nodemon ./server.js"

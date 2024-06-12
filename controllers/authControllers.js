@@ -1,20 +1,21 @@
-const { User } = require('../models/User');
-const { HttpError, errorCatcher } = require('../helpers');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const authServices = require('../services/authServices');
-require('dotenv').config();
+import { userSchema } from "../models/User.js";
+import { HttpError, errorCatcher } from "../helpers/index.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import authServices from "../services/authServices.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const register = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const user = await userSchema.findOne({ email });
 
   if (user) {
-    throw HttpError(409, 'Provided email already in use');
+    throw HttpError(409, "Provided email already in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({
+  const newUser = await userSchema.create({
     ...req.body,
     password: hashPassword,
   });
@@ -30,21 +31,21 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const user = await userSchema.findOne({ email });
 
   if (!user) {
-    throw HttpError(401, 'Email or password is wrong');
+    throw HttpError(401, "Email or password is wrong");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
 
   if (!passwordCompare) {
-    throw HttpError(401, 'Email or password is wrong');
+    throw HttpError(401, "Email or password is wrong");
   }
   const { SECRET_KEY } = process.env;
 
   const payload = { id: user._id };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '24h' });
-  await User.findByIdAndUpdate(user._id, { token });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
+  await userSchema.findByIdAndUpdate(user._id, { token });
 
   res.status(200).json({
     token,
@@ -106,13 +107,13 @@ const updateUser = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
   console.log(req.user);
-  await User.findByIdAndUpdate(_id, { token: ' ' });
+  await userSchema.findByIdAndUpdate(_id, { token: " " });
   res.status(204).json({
-    message: 'No content',
+    message: "No content",
   });
 };
 
-module.exports = {
+export default {
   register: errorCatcher(register),
   login: errorCatcher(login),
   getCurrent: errorCatcher(getCurrent),

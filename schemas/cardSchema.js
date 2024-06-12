@@ -1,18 +1,18 @@
-const Joi = require('joi');
+import Joi from "joi";
 
-const createCardSchema = Joi.object({
+export const createCardSchema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string(),
   priority: Joi.string()
-    .valid('Without priority', 'Low', 'Medium', 'High')
-    .default('Low'),
+    .valid("Without priority", "Low", "Medium", "High")
+    .default("Low"),
   deadline: Joi.date().required(),
   boardId: Joi.string().required(),
   columnId: Joi.string().required(),
   index: Joi.number().required(),
 });
 
-const updateCardSchema = Joi.object({
+export const updateCardSchema = Joi.object({
   title: Joi.string(),
   description: Joi.string(),
   deadline: Joi.date(),
@@ -21,13 +21,7 @@ const updateCardSchema = Joi.object({
   index: Joi.number(),
 });
 
-const updateColumnIdInCardSchema = Joi.object({
+export const updateColumnIdInCardSchema = Joi.object({
   columnId: Joi.string().required(),
   index: Joi.number().required(),
 });
-
-module.exports = {
-  createCardSchema,
-  updateCardSchema,
-  updateColumnIdInCardSchema,
-};

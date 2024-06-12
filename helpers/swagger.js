@@ -1,8 +1,8 @@
-const fs = require('fs/promises');
-const path = require('path');
+import fs from "fs/promises";
+import path from "path";
 
-const swaggerPath = path.join('./', 'swagger.json');
+const swaggerPath = path.join("./", "swagger.json");
 const swaggerDocs = async () =>
-  JSON.parse(await fs.readFile(swaggerPath, 'utf-8'));
+  JSON.parse(await fs.readFile(swaggerPath, "utf-8"));
 
-module.exports = swaggerDocs;
+export default swaggerDocs;
