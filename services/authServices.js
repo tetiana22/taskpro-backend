@@ -1,13 +1,11 @@
 import dotenv from "dotenv";
 import { userSchema } from "../models/User.js";
 import cloudinary from "cloudinary";
+import bcryptjs from "bcryptjs";
 dotenv.config();
 
-const {
-  CLOUDINARY_CLOUD_NAME,
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_API_SECRET,
-} = process.env;
+const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
+  process.env;
 
 const saveAvatar = async (tmpUpload, _id) => {
   cloudinary.config({
@@ -45,6 +43,7 @@ const updateThemeDB = async (idOwner, theme) => {
   );
   return updateTheme;
 };
+
 export default {
   saveAvatar,
   updateUserData,
