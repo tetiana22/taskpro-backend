@@ -1,6 +1,6 @@
 import { User } from "../models/User.js"; // Оновлено
 import { HttpError, errorCatcher } from "../helpers/index.js";
-import bcryptjs from "bcryptjs";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import authServices from "../services/authServices.js";
 import dotenv from "dotenv";
@@ -14,7 +14,7 @@ const register = async (req, res) => {
     throw HttpError(409, "Provided email already in use");
   }
 
-  const hashPassword = await bcryptjs.hash(password, 10);
+  const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
@@ -36,7 +36,7 @@ const login = async (req, res) => {
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
   }
-  const passwordCompare = await bcryptjs.compare(password, user.password);
+  const passwordCompare = await bcrypt.compare(password, user.password);
 
   if (!passwordCompare) {
     throw HttpError(401, "Email or password is wrong");

@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { User } from "../models/User.js"; // Оновлено
 import cloudinary from "cloudinary";
-import bcryptjs from "bcryptjs";
+import bcrypt from "bcrypt";
 dotenv.config();
 
 const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
@@ -24,7 +24,7 @@ const saveAvatar = async (tmpUpload, _id) => {
 
 const updateUserData = async (userId, updatedData) => {
   if (updatedData.password) {
-    updatedData.password = await bcryptjs.hash(updatedData.password, 10);
+    updatedData.password = await bcrypt.hash(updatedData.password, 10);
   }
 
   const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
