@@ -1,3 +1,10 @@
+import jwt from "jsonwebtoken";
+import HttpError from "./HttpError.js";
+import dotenv from "dotenv";
+dotenv.config();
+
+const { SECRET_KEY } = process.env;
+
 const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   console.log("Authorization header:", authorization);
