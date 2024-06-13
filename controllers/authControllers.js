@@ -1,4 +1,4 @@
-import { userSchema } from "../models/User.js";
+import { User } from "../models/User.js";
 import { HttpError, errorCatcher } from "../helpers/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -8,14 +8,14 @@ dotenv.config();
 
 const register = async (req, res) => {
   const { email, password } = req.body;
-  const user = await userSchema.findOne({ email });
+  const user = await User.findOne({ email });
 
   if (user) {
     throw HttpError(409, "Provided email already in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await userSchema.create({
+  const newUser = await User.create({
     ...req.body,
     password: hashPassword,
   });
@@ -31,7 +31,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const user = await userSchema.findOne({ email });
+  const user = await User.findOne({ email });
 
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
@@ -45,7 +45,7 @@ const login = async (req, res) => {
 
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
-  await userSchema.findByIdAndUpdate(user._id, { token });
+  await User.findByIdAndUpdate(user._id, { token });
 
   res.status(200).json({
     token,

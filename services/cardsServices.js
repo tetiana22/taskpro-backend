@@ -1,8 +1,9 @@
 import HttpError from "../helpers/HttpError.js";
-import { cardSchema } from "../models/Card.js";
+import { Card } from "../models/Card.js";
+
 
 const getAllCards = async (boardId, owner) => {
-  const cards = await cardSchema.find({ boardId, owner });
+  const cards = await Card.find({ boardId, owner });
 
   if (!cards) {
     throw HttpError(404);
@@ -12,12 +13,12 @@ const getAllCards = async (boardId, owner) => {
 };
 
 const addCards = async (owner, data) => {
-  const newCard = await cardSchema.create({ ...data, owner });
+  const newCard = await Card.create({ ...data, owner });
   return newCard;
 };
 
 const updateCard = async (id, owner, data) => {
-  const updatedCard = await cardSchema.findOneAndUpdate(
+  const updatedCard = await Card.findOneAndUpdate(
     {
       _id: id,
       owner,
@@ -32,13 +33,13 @@ const updateCard = async (id, owner, data) => {
 };
 
 const removeCard = async (id, owner) => {
-  const deletedCard = await cardSchema.findOneAndDelete({ _id: id, owner });
+  const deletedCard = await Card.findOneAndDelete({ _id: id, owner });
 
   return deletedCard;
 };
 
 const updateColumnIdInCard = async (id, owner, { columnId, index }) => {
-  const updatedCard = await cardSchema.findOneAndUpdate(
+  const updatedCard = await Card.findOneAndUpdate(
     { _id: id, owner },
     { $set: { columnId, index } },
     { new: true }

@@ -21,3 +21,4 @@ export const columnSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 columnSchema.post("save", handleMongooseError);
+export const Column = model("column", columnSchema);

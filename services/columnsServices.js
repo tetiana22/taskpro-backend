@@ -1,9 +1,9 @@
 import { HttpError } from "../helpers/index.js";
 import { cardSchema } from "../models/Card.js";
-import { columnSchema } from "../models/Column.js";
+import { Column } from "../models/Column.js";
 
 const getAllColumns = async (id, owner) => {
-  const columns = await columnSchema.find({ boardId: id, owner });
+  const columns = await Column.find({ boardId: id, owner });
 
   if (!columns) {
     throw HttpError(404);
@@ -13,20 +13,20 @@ const getAllColumns = async (id, owner) => {
 };
 
 const addColumn = async (owner, data) => {
-  const exist = await columnSchema.findOne({ title: data.title });
+  const exist = await Column.findOne({ title: data.title });
 
   if (exist) {
     return {
       error: "Column with such title already exists",
     };
   }
-  const newColumn = await columnSchema.create({ ...data, owner });
+  const newColumn = await Column.create({ ...data, owner });
 
   return newColumn;
 };
 
 const updateColumn = async (id, owner, data) => {
-  const updatedColumn = await columnSchema.findOneAndUpdate(
+  const updatedColumn = await Column.findOneAndUpdate(
     { _id: id, owner },
     data,
     { new: true }
@@ -36,7 +36,7 @@ const updateColumn = async (id, owner, data) => {
 };
 
 const removeColumn = async (id, owner) => {
-  const deletedColumn = await columnSchema.findOneAndDelete({
+  const deletedColumn = await Column.findOneAndDelete({
     _id: id,
     owner,
   });

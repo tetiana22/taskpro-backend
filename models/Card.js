@@ -51,3 +51,4 @@ export const cardSchema = new Schema(
 );
 
 cardSchema.post("save", handleMongooseError);
+export const Card = model("card", cardSchema);

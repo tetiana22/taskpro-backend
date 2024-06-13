@@ -19,7 +19,7 @@ export const userSchema = new Schema(
     password: {
       type: String,
       validate: {
-        validator: function(value) {
+        validator: function (value) {
           return value.length >= 6;
         },
         message: "Password must be at least 6 characters long",
@@ -41,3 +41,4 @@ export const userSchema = new Schema(
 );
 
 userSchema.post("save", handleMongooseError);
+export const User = model("user", userSchema);
