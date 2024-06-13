@@ -25,3 +25,4 @@ const authenticate = async (req, res, next) => {
     return next(HttpError(401, "Not authorized"));
   }
 };
+export default authenticate;
