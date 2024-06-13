@@ -1,4 +1,4 @@
-import { User } from "../models/User.js";
+import { User } from "../models/User.js"; // Оновлено
 import { HttpError, errorCatcher } from "../helpers/index.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -107,7 +107,7 @@ const updateUser = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
   console.log(req.user);
-  await userSchema.findByIdAndUpdate(_id, { token: " " });
+  await User.findByIdAndUpdate(_id, { token: " " });
   res.status(204).json({
     message: "No content",
   });

@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { userSchema } from "../models/User.js";
+import { User } from "../models/User.js"; // Оновлено
 import cloudinary from "cloudinary";
 import bcryptjs from "bcryptjs";
 dotenv.config();
@@ -27,7 +27,7 @@ const updateUserData = async (userId, updatedData) => {
     updatedData.password = await bcryptjs.hash(updatedData.password, 10);
   }
 
-  const updatedUser = await userSchema.findByIdAndUpdate(userId, updatedData, {
+  const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
     new: true,
   });
 
@@ -36,7 +36,7 @@ const updateUserData = async (userId, updatedData) => {
 };
 
 const updateThemeDB = async (idOwner, theme) => {
-  const updateTheme = await userSchema.findOneAndUpdate(
+  const updateTheme = await User.findByIdAndUpdate(
     idOwner,
     { theme },
     { new: true }
