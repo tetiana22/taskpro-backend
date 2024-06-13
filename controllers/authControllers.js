@@ -1,6 +1,6 @@
 import { User } from "../models/User.js";
 import { HttpError, errorCatcher } from "../helpers/index.js";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import authServices from "../services/authServices.js";
 import dotenv from "dotenv";
