@@ -32,7 +32,7 @@ const updateUserData = async (userId, updatedData) => {
   });
 
   updatedUser.password = undefined;
-  return updatedUser || null;
+  return updatedUser;
 };
 
 const updateThemeDB = async (idOwner, theme) => {

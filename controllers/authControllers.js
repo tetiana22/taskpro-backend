@@ -83,24 +83,38 @@ const updateUserTheme = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { _id } = req.user;
+  try {
+    const { _id } = req.user;
+    let avatarURL;
 
-  let avatarURL;
-  if (req.file) {
-    const { path: tmpUpload } = req.file;
-    console.log(tmpUpload);
-    avatarURL = await authServices.saveAvatar(tmpUpload, _id);
-  }
+    if (req.file) {
+      const { path: tmpUpload } = req.file;
+      console.log(tmpUpload);
+      avatarURL = await authServices.saveAvatar(tmpUpload, _id);
+    }
 
-  if (req.body) {
     const { name, email, password } = req.body;
-    const updatedUser = await authServices.updateUserData(_id, {
-      name,
-      email,
-      password,
-      avatarURL,
+    const updateData = { name, email, password };
+
+    // Only add avatarURL to updateData if it exists
+    if (avatarURL) {
+      updateData.avatarURL = avatarURL;
+    }
+
+    const updatedUser = await authServices.updateUserData(_id, updateData);
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      avatarURL: updatedUser.avatarURL,
+      theme: updatedUser.theme,
+      token: req.token,
+      createdAt: updatedUser.createdAt,
+      updatedAt: updatedUser.updatedAt,
     });
-    res.json({ updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
