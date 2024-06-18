@@ -117,7 +117,6 @@ const updateUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 const logout = async (req, res) => {
   const { _id } = req.user;
   console.log(req.user);
