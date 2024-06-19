@@ -4,6 +4,7 @@ import errorCatcher from "./errorCatcher.js";
 import upload from "./upload.js";
 import authenticate from "./authenticate.js";
 import isIdValid from "./isIdValid.js";
+import sendEmail from "./sendEmail.js";
 
 export {
   validateBody,
@@ -12,4 +13,5 @@ export {
   upload,
   authenticate,
   isIdValid,
+  sendEmail,
 };
