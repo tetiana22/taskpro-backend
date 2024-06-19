@@ -2,10 +2,6 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 dotenv.config();
 
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-dotenv.config();
-
 const { GMAIL_EMAIL, GMAIL_PASSWORD } = process.env;
 
 const nodemailerConfig = {
