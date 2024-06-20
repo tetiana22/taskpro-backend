@@ -2,29 +2,29 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 dotenv.config();
 
-const { YAHOO_EMAIL, YAHOO_PASSWORD } = process.env;
+const { GMAIL_EMAIL, GMAIL_PASSWORD } = process.env;
 
-if (!YAHOO_EMAIL || !YAHOO_PASSWORD) {
+if (!GMAIL_EMAIL || !GMAIL_PASSWORD) {
   console.error(
-    "YAHOO_EMAIL or YAHOO_PASSWORD is not defined in the environment variables."
+    "GMAIL_EMAIL or GMAIL_PASSWORD is not defined in the environment variables."
   );
   process.exit(1);
 }
 
 const nodemailerConfig = {
-  host: "smtp.mail.yahoo.com",
+  host: "smtp.mail.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: YAHOO_EMAIL,
-    pass: YAHOO_PASSWORD,
+    user: GMAIL_EMAIL,
+    pass: GMAIL_PASSWORD,
   },
 };
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
 const sendEmail = async (data) => {
-  const email = { ...data, from: YAHOO_EMAIL };
+  const email = { ...data, from: GMAIL_EMAIL };
   try {
     await transport.sendMail(email);
   } catch (error) {
