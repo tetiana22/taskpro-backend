@@ -130,7 +130,7 @@ const getHelpEmail = async (req, res) => {
   const { email, comment } = req.body;
 
   const helpRequest = {
-    to: "taskpro.help.service@gmail.com",
+    to: "tetianshlynchak91@yahoo.com",
     subject: "User needs help",
     html: `<div><p>Registered user of the application: <strong>${name}</strong></p>
                 <p>Message from user: <strong>${comment}</strong></p>
