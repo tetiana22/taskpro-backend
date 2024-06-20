@@ -4,6 +4,13 @@ dotenv.config();
 
 const { GMAIL_EMAIL, GMAIL_PASSWORD } = process.env;
 
+if (!GMAIL_EMAIL || !GMAIL_PASSWORD) {
+  console.error(
+    "GMAIL_EMAIL or GMAIL_PASSWORD is not defined in the environment variables."
+  );
+  process.exit(1);
+}
+
 const nodemailerConfig = {
   host: "smtp.gmail.com",
   port: 465,
@@ -16,9 +23,14 @@ const nodemailerConfig = {
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-const sendEmail = (data) => {
+const sendEmail = async (data) => {
   const email = { ...data, from: GMAIL_EMAIL };
-  return transport.sendMail(email);
+  try {
+    await transport.sendMail(email);
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
 };
 
 export default sendEmail;
