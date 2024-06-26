@@ -81,18 +81,25 @@ const updateUserTheme = async (req, res) => {
     theme: updatedTheme.theme,
   });
 };
+const updateUser = async (req, res) => {
+  const { _id } = req.user;
 
-const updateUser = async (userId, updatedData) => {
-  if (updatedData.password) {
-    updatedData.password = await bcryptjs.hash(updatedData.password, 10);
+  let avatarURL;
+  if (req.file) {
+    const { path: tmpUpload } = req.file;
+    console.log(tmpUpload);
+    avatarURL = await authServices.saveAvatar(tmpUpload, _id);
   }
-
-  const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
-    new: true,
-  });
-
-  updatedUser.password = undefined;
-  return updatedUser;
+  if (req.body) {
+    const { name, email, password } = req.body;
+    const updatedUser = await authServices.updateUserData(_id, {
+      name,
+      email,
+      password,
+      avatarURL,
+    });
+    res.json({ updatedUser });
+  }
 };
 const logout = async (req, res) => {
   const { _id } = req.user;
