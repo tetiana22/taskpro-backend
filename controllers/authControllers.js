@@ -45,7 +45,7 @@ const login = async (req, res) => {
 
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
-  await User.findByIdAndUpdate(user._id, { token });
+  await User.findByIdAndUpdate(_id, { token: "", avatarURL: null });
 
   res.status(200).json({
     token,
@@ -125,6 +125,7 @@ const logout = async (req, res) => {
     message: "No content",
   });
 };
+
 const getHelpEmail = async (req, res) => {
   console.log(req.user); // Should print user data
   console.log(req.body);
