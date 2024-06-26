@@ -1,13 +1,20 @@
 import multer from "multer";
-import { fileURLToPath } from "url";
-import path from "path";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
-const tmpDir = path.join(__dirname, "../", "tmp");
+const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
+  process.env;
 
-const multerConfig = multer.diskStorage({
+cloudinary.config({
+  cloud_name: CLOUDINARY_CLOUD_NAME,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET,
+});
+
+const multerConfig = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: "avatars",
+  allowedFormats: ["jpg", "png"],
   destination: tmpDir,
   filename: (req, file, cb) => {
     cb(null, file.originalname);

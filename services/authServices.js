@@ -4,23 +4,29 @@ import cloudinary from "cloudinary";
 import bcryptjs from "bcryptjs";
 dotenv.config();
 
-const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
-  process.env;
+const saveAvatar = async (req) => {
+  const avatarURL = req.file.path;
+  const { _id } = req.user;
+  const public_id = `user_avatar-${_id}`;
 
-const saveAvatar = async (tmpUpload, _id) => {
-  cloudinary.config({
-    cloud_name: CLOUDINARY_CLOUD_NAME,
-    api_key: CLOUDINARY_API_KEY,
-    api_secret: CLOUDINARY_API_SECRET,
-  });
-  const result = await cloudinary.uploader.upload(tmpUpload);
-  console.log("Cloudinary upload result:", result);
-  const url = cloudinary.url(result.public_id, {
-    width: 100,
-    height: 150,
-    crop: "fill",
-  });
-  return url;
+  const options = {
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+    public_id,
+    folder: "avatars",
+    transformation: [
+      { width: 200, height: 200, gravity: "auto", crop: "fill" },
+    ],
+  };
+
+  try {
+    const result = await cloudinary.uploader.upload(avatarURL, options);
+
+    return result.secure_url;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const updateUserData = async (userId, updatedData) => {
