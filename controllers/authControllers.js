@@ -110,8 +110,6 @@ const updateUser = async (req, res) => {
       avatarURL: updatedUser.avatarURL,
       theme: updatedUser.theme,
       token: req.token,
-      createdAt: updatedUser.createdAt,
-      updatedAt: updatedUser.updatedAt,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
