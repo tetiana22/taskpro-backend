@@ -82,38 +82,17 @@ const updateUserTheme = async (req, res) => {
   });
 };
 
-const updateUser = async (req, res) => {
-  try {
-    const { _id } = req.user;
-    let avatarURL;
-
-    if (req.file) {
-      const { path: tmpUpload } = req.file;
-      console.log(tmpUpload);
-      avatarURL = await authServices.saveAvatar(tmpUpload, _id);
-    }
-
-    const { name, email, password } = req.body;
-    const updateData = { name, email, password };
-
-    // Only add avatarURL to updateData if it exists
-    if (avatarURL) {
-      updateData.avatarURL = avatarURL;
-    }
-
-    const updatedUser = await authServices.updateUserData(_id, updateData);
-
-    res.json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      avatarURL: updatedUser.avatarURL,
-      theme: updatedUser.theme,
-      token: req.token,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+const updateUser = async (userId, updatedData) => {
+  if (updatedData.password) {
+    updatedData.password = await bcryptjs.hash(updatedData.password, 10);
   }
+
+  const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
+    new: true,
+  });
+
+  updatedUser.password = undefined;
+  return updatedUser;
 };
 const logout = async (req, res) => {
   const { _id } = req.user;
