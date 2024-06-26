@@ -126,6 +126,8 @@ const logout = async (req, res) => {
   });
 };
 const getHelpEmail = async (req, res) => {
+  console.log(req.user); // Should print user data
+  console.log(req.body);
   const { name } = req.user;
   const { email, comment } = req.body;
 

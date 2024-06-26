@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { User } from "../models/User.js"; // Оновлено
+import { User } from "../models/User.js";
 import cloudinary from "cloudinary";
 import bcryptjs from "bcryptjs";
 dotenv.config();
@@ -14,6 +14,7 @@ const saveAvatar = async (tmpUpload, _id) => {
     api_secret: CLOUDINARY_API_SECRET,
   });
   const result = await cloudinary.uploader.upload(tmpUpload);
+  console.log("Cloudinary upload result:", result);
   const url = cloudinary.url(result.public_id, {
     width: 100,
     height: 150,
