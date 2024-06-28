@@ -114,7 +114,7 @@ const updateUser = async (req, res) => {
     const { name, email, password } = req.body;
     const updateData = { name, email, password };
 
-    // Додайте avatarURL до updateData тільки якщо він існує
+    // Add avatarURL to updateData only if it exists
     if (avatarURL) {
       updateData.avatarURL = avatarURL;
     }
