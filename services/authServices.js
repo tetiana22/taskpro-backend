@@ -20,6 +20,7 @@ const saveAvatar = async (tmpUpload, _id) => {
     height: 150,
     crop: "fill",
   });
+  console.error("URL:", url);
   return url;
 };
 
