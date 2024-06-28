@@ -33,7 +33,8 @@
 //   });
 //   updatedUser.password = undefined;
 //   return updatedUser;
-// };import bcryptjs from "bcryptjs";
+// };
+import bcryptjs from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
 import { User } from "../models/User.js";
 import dotenv from "dotenv";
