@@ -1,4 +1,4 @@
-import { User } from "../models/User.js"; // Оновлено
+import { User } from "../models/User.js";
 import { HttpError, errorCatcher, sendEmail } from "../helpers/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -101,25 +101,21 @@ const updateUserTheme = async (req, res) => {
 //     res.json({ updatedUser });
 //   }
 // };
-const updateUser = async (req, res) => {
+export const updateUser = async (req, res) => {
   const { _id } = req.user;
 
   let avatarURL;
   if (req.file) {
     const { path: tmpUpload } = req.file;
-    console.log(tmpUpload);
-    avatarURL = await authServices.saveAvatar(tmpUpload, _id);
+    avatarURL = await saveAvatar(tmpUpload, _id);
   }
-  if (req.body) {
-    const { name, email, password } = req.body;
-    const updatedUser = await authServices.updateUserData(_id, {
-      name,
-      email,
-      password,
-      avatarURL,
-    });
-    res.json({ updatedUser });
-  }
+
+  const updatedData = { ...req.body, avatarURL };
+
+  if (!req.file) delete updatedData.avatarURL;
+
+  const updatedUser = await updateUserData(_id, updatedData);
+  res.json({ updatedUser });
 };
 
 const logout = async (req, res) => {

@@ -1,6 +1,6 @@
 import express from "express";
-
-import { authenticate, validateBody, upload } from "../helpers/index.js";
+import multer from "multer";
+import { authenticate, validateBody } from "../helpers/index.js";
 import {
   registerSchema,
   loginSchema,
@@ -8,7 +8,7 @@ import {
   updateThemeSchema,
 } from "../schemas/userSchema.js";
 import authControllers from "../controllers/authControllers.js";
-
+const upload = multer({ dest: "tmp/" });
 const authRouter = express.Router();
 
 authRouter.post(
