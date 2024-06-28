@@ -49,7 +49,7 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
 });
 
-const saveAvatar = async (tmpUpload, _id) => {
+export const saveAvatar = async (tmpUpload, _id) => {
   const result = await cloudinary.uploader.upload(tmpUpload);
   const url = cloudinary.url(result.public_id, {
     width: 100,
@@ -59,7 +59,7 @@ const saveAvatar = async (tmpUpload, _id) => {
   return url;
 };
 
-const updateUserData = async (userId, updatedData) => {
+export const updateUserData = async (userId, updatedData) => {
   if (updatedData.password) {
     updatedData.password = await bcryptjs.hash(updatedData.password, 10);
   }
@@ -69,16 +69,11 @@ const updateUserData = async (userId, updatedData) => {
   updatedUser.password = undefined;
   return updatedUser;
 };
-const updateThemeDB = async (idOwner, theme) => {
+export const updateThemeDB = async (idOwner, theme) => {
   const updateTheme = await User.findByIdAndUpdate(
     idOwner,
     { theme },
     { new: true }
   );
   return updateTheme;
-};
-export default {
-  saveAvatar,
-  updateUserData,
-  updateThemeDB,
 };
