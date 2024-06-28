@@ -2,7 +2,8 @@ import { User } from "../models/User.js";
 import { HttpError, errorCatcher, sendEmail } from "../helpers/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import authServices from "../services/authServices.js";
+import { authServices, updateUserData } from "../services/authServices.js";
+
 import dotenv from "dotenv";
 dotenv.config();
 
