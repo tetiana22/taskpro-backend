@@ -1,6 +1,6 @@
-import dotenv from "dotenv";
-import { User } from "../models/User.js";
+import bcryptjs from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -14,6 +14,7 @@ const saveAvatar = async (tmpUpload, _id) => {
     api_secret: CLOUDINARY_API_SECRET,
   });
   const result = await cloudinary.uploader.upload(tmpUpload);
+  console.log(result);
   const url = cloudinary.url(result.public_id, {
     width: 100,
     height: 150,
@@ -26,24 +27,20 @@ const updateUserData = async (userId, updatedData) => {
   if (updatedData.password) {
     updatedData.password = await bcryptjs.hash(updatedData.password, 10);
   }
-
   const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
     new: true,
   });
-
   updatedUser.password = undefined;
-  return updatedUser || null;
+  return updatedUser;
 };
-
 const updateThemeDB = async (idOwner, theme) => {
-  const updateTheme = await User.findOneAndUpdate(
+  const updateTheme = await User.findByIdAndUpdate(
     idOwner,
     { theme },
     { new: true }
   );
   return updateTheme;
 };
-
 export default {
   saveAvatar,
   updateUserData,
