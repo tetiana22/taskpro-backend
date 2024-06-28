@@ -108,14 +108,13 @@ const updateUser = async (req, res) => {
 
     if (req.file) {
       const { path: tmpUpload } = req.file;
-      console.log(tmpUpload);
       avatarURL = await authServices.saveAvatar(tmpUpload, _id);
     }
 
     const { name, email, password } = req.body;
     const updateData = { name, email, password };
 
-    // Only add avatarURL to updateData if it exists
+    // Додайте avatarURL до updateData тільки якщо він існує
     if (avatarURL) {
       updateData.avatarURL = avatarURL;
     }
@@ -131,7 +130,8 @@ const updateUser = async (req, res) => {
       token: req.token,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Error updating user" });
   }
 };
 

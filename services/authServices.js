@@ -7,47 +7,23 @@ dotenv.config();
 const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
   process.env;
 
+cloudinary.config({
+  cloud_name: CLOUDINARY_CLOUD_NAME,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET,
+});
+
 const saveAvatar = async (tmpUpload, _id) => {
-  cloudinary.config({
-    cloud_name: CLOUDINARY_CLOUD_NAME,
-    api_key: CLOUDINARY_API_KEY,
-    api_secret: CLOUDINARY_API_SECRET,
-  });
-  const result = await cloudinary.uploader.upload(tmpUpload);
-  console.log(result);
-  const url = cloudinary.url(result.public_id, {
-    width: 100,
-    height: 150,
-    crop: "fill",
-  });
-  console.error("URL:", url);
-  return url;
-};
-
-const updateUserData = async (userId, updatedData) => {
-  if (updatedData.password) {
-    updatedData.password = await bcryptjs.hash(updatedData.password, 10);
+  try {
+    const result = await cloudinary.uploader.upload(tmpUpload, {
+      upload_preset: "ru6zopod", // Замініть на вашу налаштування
+    });
+    console.log("Upload result:", result);
+    return result.secure_url; // Повертаємо URL зображення з Cloudinary
+  } catch (error) {
+    console.error("Error uploading avatar:", error);
+    throw new Error("Error uploading avatar");
   }
-
-  const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
-    new: true,
-  });
-
-  updatedUser.password = undefined;
-  return updatedUser;
 };
 
-const updateThemeDB = async (idOwner, theme) => {
-  const updateTheme = await User.findByIdAndUpdate(
-    idOwner,
-    { theme },
-    { new: true }
-  );
-  return updateTheme;
-};
-
-export default {
-  saveAvatar,
-  updateUserData,
-  updateThemeDB,
-};
+export default saveAvatar;
