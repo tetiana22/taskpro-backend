@@ -38,6 +38,8 @@ import bcryptjs from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
 import { User } from "../models/User.js";
 import dotenv from "dotenv";
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 dotenv.config();
 
@@ -49,6 +51,34 @@ cloudinary.config({
   api_key: CLOUDINARY_API_KEY,
   api_secret: CLOUDINARY_API_SECRET,
 });
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    // Determine the folder based on file properties or request data
+    let folder;
+    if (file.fieldname === "avatarURL") {
+      folder = "avatars";
+    } else if (file.fieldname === "documents") {
+      folder = "documents";
+    } else {
+      folder = "misc";
+    }
+    return {
+      folder,
+      allowed_formats: ["jpg", "png", "webp", "jpeg"], // Adjust the allowed formats as needed
+      public_id: req.user._id, // Use original filename as the public ID
+      transformation: [
+        { width: 350, height: 350, crop: "fill" },
+        { width: 700, height: 700, crop: "fill" },
+      ],
+    };
+  },
+});
+
+const upload = multer({ storage });
+
+export default upload;
 
 export const saveAvatar = async (tmpUpload, _id) => {
   const result = await cloudinary.uploader.upload(tmpUpload);

@@ -102,22 +102,22 @@ const updateUserTheme = async (req, res) => {
 //     res.json({ updatedUser });
 //   }
 // };
-export const updateUser = async (req, res) => {
-  const { _id } = req.user;
+// export const updateUser = async (req, res) => {
+//   const { _id } = req.user;
 
-  let avatarURL;
-  if (req.file) {
-    const { path: tmpUpload } = req.file;
-    avatarURL = await saveAvatar(tmpUpload, _id);
-  }
+//   let avatarURL;
+//   if (req.file) {
+//     const { path: tmpUpload } = req.file;
+//     avatarURL = await saveAvatar(tmpUpload, _id);
+//   }
 
-  const updatedData = { ...req.body, avatarURL };
+//   const updatedData = { ...req.body, avatarURL };
 
-  if (!req.file) delete updatedData.avatarURL;
+//   if (!req.file) delete updatedData.avatarURL;
 
-  const updatedUser = await updateUserData(_id, updatedData);
-  res.json({ updatedUser });
-};
+//   const updatedUser = await updateUserData(_id, updatedData);
+//   res.json({ updatedUser });
+// };true
 
 const logout = async (req, res) => {
   const { _id } = req.user;
@@ -161,6 +161,34 @@ const getHelpEmail = async (req, res) => {
       .status(500)
       .json({ message: "Failed to send email", error: error.message });
   }
+};
+const updateUser = async (req, res) => {
+  const { _id } = req.user;
+  const { email, name, newPassword } = req.body;
+
+  const newData = {};
+  if (name) newData.name = name;
+  if (req.file?.path) newData.avatarURL = req.file.path;
+
+  if (newPassword) {
+    const newHashPassword = await bcrypt.hash(newPassword, 10);
+    newData.password = newHashPassword;
+  }
+
+  if (email) {
+    const isTakenEmail = await User.findOne({ email });
+    if (isTakenEmail) {
+      return res.status(400).json({ message: "Email is already taken" });
+    }
+    newData.email = email;
+  }
+
+  const result = await User.findByIdAndUpdate(_id, newData, { new: true });
+  if (!result) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  res.status(200).json(result);
 };
 
 export default {
