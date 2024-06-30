@@ -81,64 +81,27 @@ const updateUserTheme = async (req, res) => {
     theme: updatedTheme.theme,
   });
 };
-// const updateUser = async (req, res) => {
-//   const { _id } = req.user;
-
-//   let avatarURL;
-//   if (req.file) {
-//     const { path: tmpUpload } = req.file;
-//     console.log(tmpUpload);
-//     avatarURL = await authServices.saveAvatar(tmpUpload, _id);
-//   }
-//   if (req.body) {
-//     const { name, email, password } = req.body;
-//     const updatedUser = await authServices.updateUserData(_id, {
-//       name,
-//       email,
-//       password,
-//       avatarURL,
-//     });
-//     res.json({ updatedUser });
-//   }
-// };
 const updateUser = async (req, res) => {
   const { _id } = req.user;
-  const { name, email, password, avatarURL } = req.body;
 
-  try {
-    let updatedUser;
-
-    if (req.file) {
-      // If a new avatar file is uploaded, save it first
-      await saveAvatar(req, res); // Call saveAvatar function
-      const { avatarURL: newAvatarURL } = res.locals; // Assuming saveAvatar sets res.locals.avatarURL
-
-      // Update user including new avatar URL
-      updatedUser = await User.findByIdAndUpdate(
-        _id,
-        { name, email, password, avatarURL: newAvatarURL },
-        { new: true }
-      );
-    } else {
-      // Update user without changing avatar URL
-      updatedUser = await User.findByIdAndUpdate(
-        _id,
-        { name, email, password, avatarURL },
-        { new: true }
-      );
-    }
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Return updated user data
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    console.error("Error updating user:", error);
-    res.status(500).json({ message: "Failed to update user" });
+  let avatarURL;
+  if (req.file) {
+    const { path: tmpUpload } = req.file;
+    console.log(tmpUpload);
+    avatarURL = await authServices.saveAvatar(tmpUpload, _id);
+  }
+  if (req.body) {
+    const { name, email, password } = req.body;
+    const updatedUser = await authServices.updateUserData(_id, {
+      name,
+      email,
+      password,
+      avatarURL,
+    });
+    res.json({ updatedUser });
   }
 };
+
 const logout = async (req, res) => {
   const { _id } = req.user;
   console.log(req.user);
