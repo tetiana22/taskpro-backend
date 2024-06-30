@@ -2,8 +2,7 @@ import { User } from "../models/User.js";
 import { HttpError, errorCatcher, sendEmail } from "../helpers/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { updateUserData, saveAvatar } from "../services/authServices.js";
-
+import saveAvatar from "../services/authServices.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -102,24 +101,39 @@ const updateUserTheme = async (req, res) => {
 //     res.json({ updatedUser });
 //   }
 // };
-export const updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   const { _id } = req.user;
+  const { name, email, password, avatarURL } = req.body;
 
-  let avatarURL;
-  if (req.file) {
-    const { path: tmpUpload } = req.file;
-    avatarURL = await saveAvatar(tmpUpload, _id);
+  try {
+    let updatedUser;
+    if (req.file) {
+      // If a new avatar file is uploaded, save it first
+      await saveAvatar(req, res); // Call saveAvatar function
+      const { avatarURL: newAvatarURL } = res.locals; // Assuming saveAvatar sets res.locals.avatarURL
+      updatedUser = await User.findByIdAndUpdate(
+        _id,
+        { name, email, password, avatarURL: newAvatarURL },
+        { new: true }
+      );
+    } else {
+      // If no avatar file is uploaded, update other fields only
+      updatedUser = await User.findByIdAndUpdate(
+        _id,
+        { name, email, password, avatarURL },
+        { new: true }
+      );
+    }
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(updatedUser); // Return updated user data
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update user" });
   }
-
-  const updatedData = { ...req.body, avatarURL };
-
-  if (!req.file) delete updatedData.avatarURL;
-
-  const updatedUser = await updateUserData(_id, updatedData);
-  res.json({ updatedUser });
 };
-true;
-
 const logout = async (req, res) => {
   const { _id } = req.user;
   console.log(req.user);
