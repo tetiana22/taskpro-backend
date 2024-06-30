@@ -88,11 +88,11 @@ const updateUser = async (req, res) => {
   if (req.file) {
     const { path: tmpUpload } = req.file;
     console.log(tmpUpload);
-    avatarURL = await authServices.saveAvatar(tmpUpload, _id);
+    avatarURL = await saveAvatar(tmpUpload, _id);
   }
   if (req.body) {
     const { name, email, password } = req.body;
-    const updatedUser = await authServices.updateUserData(_id, {
+    const updatedUser = await updateUserData(_id, {
       name,
       email,
       password,
