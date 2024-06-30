@@ -107,17 +107,20 @@ const updateUser = async (req, res) => {
 
   try {
     let updatedUser;
+
     if (req.file) {
       // If a new avatar file is uploaded, save it first
       await saveAvatar(req, res); // Call saveAvatar function
       const { avatarURL: newAvatarURL } = res.locals; // Assuming saveAvatar sets res.locals.avatarURL
+
+      // Update user including new avatar URL
       updatedUser = await User.findByIdAndUpdate(
         _id,
         { name, email, password, avatarURL: newAvatarURL },
         { new: true }
       );
     } else {
-      // If no avatar file is uploaded, update other fields only
+      // Update user without changing avatar URL
       updatedUser = await User.findByIdAndUpdate(
         _id,
         { name, email, password, avatarURL },
@@ -128,9 +131,11 @@ const updateUser = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json(updatedUser); // Return updated user data
+
+    // Return updated user data
+    res.status(200).json(updatedUser);
   } catch (error) {
-    console.error(error);
+    console.error("Error updating user:", error);
     res.status(500).json({ message: "Failed to update user" });
   }
 };
