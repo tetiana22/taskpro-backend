@@ -2,7 +2,7 @@ import { User } from "../models/User.js";
 import { HttpError, errorCatcher, sendEmail } from "../helpers/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { saveAvatar } from "../services/authServices.js";
+import { saveAvatar, updateUserData } from "../services/authServices.js";
 import dotenv from "dotenv";
 dotenv.config();
 
