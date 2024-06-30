@@ -162,7 +162,7 @@ const getHelpEmail = async (req, res) => {
       .json({ message: "Failed to send email", error: error.message });
   }
 };
-export const updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   const { _id } = req.user;
   const { email, name, newPassword } = req.body;
 
@@ -171,7 +171,7 @@ export const updateUser = async (req, res) => {
   if (req.file?.path) newData.avatarURL = req.file.path; // Використовуйте правильний шлях до зображення
 
   if (newPassword) {
-    const newHashPassword = await bcryptjs.hash(newPassword, 10);
+    const newHashPassword = await bcrypt.hash(newPassword, 10);
     newData.password = newHashPassword;
   }
 
