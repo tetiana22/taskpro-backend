@@ -81,7 +81,15 @@ const upload = multer({ storage });
 export default upload;
 
 export const saveAvatar = async (tmpUpload, _id) => {
-  const result = await cloudinary.uploader.upload(tmpUpload);
+  const result = await cloudinary.uploader.upload(tmpUpload, {
+    public_id: `avatars/${_id}`, // Використовуйте ідентифікатор користувача як public_id для унікальності
+    transformation: [
+      { width: 350, height: 350, crop: "fill" },
+      { width: 700, height: 700, crop: "fill" },
+    ],
+    invalidate: true, // Очищення кешу Cloudinary для нових зображень
+  });
+
   const url = cloudinary.url(result.public_id, {
     width: 100,
     height: 150,
