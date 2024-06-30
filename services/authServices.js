@@ -69,7 +69,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
-const saveAvatar = async (req, res) => {
+export const saveAvatar = async (req, res) => {
   try {
     const { path } = req.file;
     // Optionally, you can process `path` to extract the Cloudinary URL
@@ -80,7 +80,7 @@ const saveAvatar = async (req, res) => {
   }
 };
 
-export default { saveAvatar, upload };
+export default upload;
 export const updateThemeDB = async (idOwner, theme) => {
   const updateTheme = await User.findByIdAndUpdate(
     idOwner,
