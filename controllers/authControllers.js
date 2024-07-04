@@ -2,7 +2,11 @@ import { User } from "../models/User.js";
 import { HttpError, errorCatcher, sendEmail } from "../helpers/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { saveAvatar, updateUserData } from "../services/authServices.js";
+import {
+  saveAvatar,
+  updateUserData,
+  updateThemeDB,
+} from "../services/authServices.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -74,7 +78,7 @@ const updateUserTheme = async (req, res) => {
   const { _id: idOwner } = req.user;
   const { theme } = req.body;
 
-  const updatedTheme = await authServices.updateThemeDB(idOwner, theme);
+  const updatedTheme = await updateThemeDB(idOwner, theme);
 
   res.status(200).json({
     email: updatedTheme.email,
