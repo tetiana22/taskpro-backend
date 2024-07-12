@@ -1,5 +1,5 @@
 import { HttpError } from "../helpers/index.js";
-import { cardSchema } from "../models/Card.js";
+import { Card } from "../models/Card.js";
 import { Column } from "../models/Column.js";
 
 const getAllColumns = async (id, owner) => {
@@ -41,7 +41,7 @@ const removeColumn = async (id, owner) => {
     owner,
   });
 
-  await cardSchema.deleteMany({ columnId: id, owner });
+  await Card.deleteMany({ columnId: id, owner });
 
   return deletedColumn;
 };
