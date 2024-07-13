@@ -1,7 +1,7 @@
 import { Board } from "../models/Board.js";
 import HttpError from "../helpers/HttpError.js";
-import { cardSchema } from "../models/Card.js";
-import { columnSchema } from "../models/Column.js";
+import { Card, cardSchema } from "../models/Card.js";
+import { Column, columnSchema } from "../models/Column.js";
 
 const listBoards = (owner) => Board.find({ owner });
 
@@ -49,8 +49,8 @@ const removeBoard = async (owner, boardId) => {
     _id: boardId,
     owner,
   });
-  await columnSchema.deleteMany({ boardId, owner });
-  await cardSchema.deleteMany({ boardId, owner });
+  await Column.deleteMany({ boardId, owner });
+  await Card.deleteMany({ boardId, owner });
 
   if (!deletedBoard) {
     throw HttpError(404);
