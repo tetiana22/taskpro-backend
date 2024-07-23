@@ -19,12 +19,15 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const payload = { id: newUser._id };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
   });
+
+  const { SECRET_KEY } = process.env;
+  const payload = { id: newUser._id };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
+
   res.status(201).json({
     token,
     user: {
