@@ -1,5 +1,6 @@
 import bcryptjs from "bcryptjs";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "cloudinary";
+const { v2 } = cloudinary;
 import { User } from "../models/User.js";
 import dotenv from "dotenv";
 
